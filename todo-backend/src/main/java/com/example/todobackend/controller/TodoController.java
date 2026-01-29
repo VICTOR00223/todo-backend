@@ -2,9 +2,13 @@ package com.example.todobackend.controller;
 
 import com.example.todobackend.model.Todo;
 import com.example.todobackend.repository.TodoRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.*;// PostMapping, GetMapping, PutMapping, DeleteMapping, PathVariable
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 
 
@@ -22,9 +26,13 @@ public class TodoController
 
     // Create a To-Do item
     @PostMapping
-    public Todo createTodo(@RequestBody Todo todo)
+    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo)
     {
-        return todoRepository.save(todo); // saves task
+        Todo savedTodo = todoRepository.save(todo); // saves task
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED) // 201 , static → returns BodyBuilder
+                .body(savedTodo);  // instance → builds ResponseEntity<Todo>
     }
 
     // View all To-Do items
@@ -36,9 +44,16 @@ public class TodoController
 
     // View a single To-Do item
     @GetMapping("/{id}")
-    public Todo getsingleTodo()
+    public Todo getsingleTodo(@PathVariable Long id)
     {
-        
+        // 1. Ask the repository for a Todo with this id
+        // Returns Optional<Todo> — might be empty if not found
+        return todoRepository.findById(id)
+                // 2️⃣. if Optional is empty, throw a proper HTTP 404 error
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, // HTTP status code (404)
+                        "Todo not found"      // Message returned to the client
+                ));
     }
 
     // Update a To-Do item
