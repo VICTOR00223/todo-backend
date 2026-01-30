@@ -44,7 +44,7 @@ public class TodoController
 
     // View a single To-Do item
     @GetMapping("/{id}")
-    public Todo getsingleTodo(@PathVariable Long id)
+    public Todo getSingleTodo(@PathVariable Long id)
     {
         // 1. Ask the repository for a Todo with this id
         // Returns Optional<Todo> — might be empty if not found
@@ -77,13 +77,13 @@ public class TodoController
     @DeleteMapping("/{id}")
     public void deleteTodo(@PathVariable Long id)
     {
-        Todo deleteTodo = todoRepository.findById(id)
+        Todo todoToDelete = todoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
                         "Todo not found"
                 ));
 
-        todoRepository.delete(deleteTodo); // delete Todo
+        todoRepository.delete(todoToDelete); // delete Todo
     }
 }
 
