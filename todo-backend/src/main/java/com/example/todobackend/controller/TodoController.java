@@ -49,7 +49,7 @@ public class TodoController
         // 1. Ask the repository for a Todo with this id
         // Returns Optional<Todo> — might be empty if not found
         return todoRepository.findById(id)
-                // 2️⃣. if Optional is empty, throw a proper HTTP 404 error
+                // 2️⃣. if Optional is empty, throw a proper HTTP 404 error, else return Todo
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, // HTTP status code (404)
                         "Todo not found"      // Message returned to the client
@@ -58,13 +58,32 @@ public class TodoController
 
     // Update a To-Do item
     @PutMapping("/{id}")
-    public void updateTodo(@PathVariable Long id, @RequestBody Todo updatedTodo)
+    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo updatedTodo)
     {
+        Todo existingTodo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Todo not found"
+                ));
+
+        existingTodo.setTitle(updatedTodo.getTitle());
+        existingTodo.setDescription(updatedTodo.getDescription());
+        existingTodo.setCompleted(updatedTodo.isCompleted());
+
+        return todoRepository.save(existingTodo);
     }
 
     // Delete a To-Do item
     @DeleteMapping("/{id}")
-    public void deleteTodo() {
+    public void deleteTodo(@PathVariable Long id)
+    {
+        Todo deleteTodo = todoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Todo not found"
+                ));
+
+        todoRepository.delete(deleteTodo); // delete Todo
     }
 }
 
