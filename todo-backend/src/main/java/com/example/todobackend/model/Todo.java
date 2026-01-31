@@ -20,10 +20,9 @@ public class Todo
     private boolean completed;
     private LocalDateTime createdAt;
 
-    public Todo(String title, String description)
+    @PrePersist //Before inserting this entity into the database, run this method.
+    protected void onCreate()
     {
-        this.title = title;
-        this.description = description;
         this.completed = false;
         this.createdAt = LocalDateTime.now();
     }
