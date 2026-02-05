@@ -1,5 +1,6 @@
 package com.example.todobackend.model;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.persistence.*; // @GeneratedValue, @Id, @Entity
 import java.time.LocalDateTime; // LocalDateTime.now()
 import lombok.*; // @Getter, @Setter, @NoArgsConstructor
@@ -16,6 +17,7 @@ public class Todo
     private Long id;
 
     // 1. Added nullable = false to ensure titles aren't empty in the DB
+    @NotBlank(message = "Title is mandatory")
     @Column(nullable = false)
     private String title;
 

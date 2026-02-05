@@ -2,6 +2,7 @@ package com.example.todobackend.controller;
 
 import com.example.todobackend.model.Todo;
 import com.example.todobackend.repository.TodoRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ public class TodoController
 
     // Create a To-Do item
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo)
+    public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo)
     {
         Todo savedTodo = todoRepository.save(todo); // saves task
 
@@ -58,7 +59,7 @@ public class TodoController
 
     // Update a To-Do item
     @PutMapping("/{id}")
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo updatedTodo)
+    public Todo updateTodo(@PathVariable Long id, @Valid @RequestBody Todo updatedTodo)
     {
         Todo existingTodo = todoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -66,8 +67,14 @@ public class TodoController
                         "Todo not found"
                 ));
 
-        existingTodo.setTitle(updatedTodo.getTitle());
-        existingTodo.setDescription(updatedTodo.getDescription());
+        if (updatedTodo.getTitle() != null)
+        {
+            existingTodo.setTitle(updatedTodo.getTitle());
+        }
+        if (updatedTodo.getDescription() != null)
+        {
+            existingTodo.setDescription(updatedTodo.getDescription());
+        }
         existingTodo.setCompleted(updatedTodo.isCompleted());
 
         return todoRepository.save(existingTodo);
