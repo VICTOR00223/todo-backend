@@ -18,13 +18,13 @@ Before running this application, ensure you have the following installed on your
 
 ## 🛠 Setup & Installation
 
-1. Clone the Repository
+### 1. Clone the Repository
 First, bring the source code to your local machine:
 ```bash
 git clone https://github.com/VICTOR00223/todo-backend.git
 cd todo-backend
 ```
-2. Database Configuration
+### 2. Database Configuration
 Open your PostgreSQL terminal (psql) or a GUI tool like pgAdmin and run the following commands:
 ```sql
 -- Create the database
@@ -34,7 +34,7 @@ CREATE DATABASE tododb;
 CREATE USER todouser WITH PASSWORD 'password';
 GRANT ALL PRIVILEGES ON DATABASE tododb TO todouser;
 ```
-3. Application Properties
+### 3. Application Properties
 You must ensure the application is pointing to the database you created in the previous step. Navigate to src/main/resources/application.properties and verify/update the following:
 ```properties
 # Database Connection
@@ -46,7 +46,7 @@ spring.datasource.password=password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 ```
-4. Run the Application
+### 4. Run the Application
 Navigate to the project root directory in your terminal and execute the following command to start the Spring Boot server:
 On Mac or Linux:
 ```bash
@@ -56,7 +56,7 @@ On Windows:
 ```bash
 mvnw.cmd spring-boot:run
 ```
-5. Testing the API
+### 5. Testing the API
 Since this is a headless Backend API, you can verify it is working by sending requests via curl in your terminal.
 
 A. Create a New Task (POST)
