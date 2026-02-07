@@ -48,6 +48,7 @@ spring.jpa.show-sql=true
 ```
 ### 4. Run the Application
 Navigate to the project root directory in your terminal and execute the following command to start the Spring Boot server:
+
 On Mac or Linux:
 ```bash
 ./mvnw spring-boot:run
